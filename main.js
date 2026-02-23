@@ -1,7 +1,7 @@
 /* Endpoint */
 const endpoint = "https://flynn.boolean.careers/exercises/api/random/mail";
 
-function addEmail() {
+function addEmail(endpoint) {
     /* API Call using fetch API  */
     fetch(endpoint)
         .then(response => response.json())
@@ -25,5 +25,5 @@ function addEmail() {
 }
 
 for (let i = 0; i < 10; i++) {
-    addEmail();
+    addEmail(endpoint);
 }
