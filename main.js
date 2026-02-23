@@ -75,6 +75,13 @@ setInterval(function () {
 }, 5000)
 
 
+/**
+ * 
+ * @param {string} email 
+ * @param {HTMLElement} emailContainerEl 
+ * @param {HTMLElement} callingSpinnerEl 
+ * @param {Number} index 
+ */
 function renderEmail(email, emailContainerEl, callingSpinnerEl, index) {
 
     /* Create li element */
@@ -89,9 +96,13 @@ function renderEmail(email, emailContainerEl, callingSpinnerEl, index) {
     callingSpinnerEl.classList.add("d-none");
 }
 
+
 /**
  * 
  * @param {URL} endpoint 
+ * @param {HTMLElement} emailContainerEl 
+ * @param {HTMLElement} callingSpinnerEl 
+ * @param {Number} index 
  */
 function addEmail(endpoint, emailContainerEl, callingSpinnerEl, index) {
 
@@ -112,7 +123,13 @@ function addEmail(endpoint, emailContainerEl, callingSpinnerEl, index) {
         })
 }
 
-
+/**
+ * 
+ * @param {URL} endpoint 
+ * @param {HTMLElement} emailContainerEl 
+ * @param {HTMLElement} callingSpinnerEl 
+ * @param {Number} count 
+ */
 function addMoreEmails(endpoint, emailContainerEl, callingSpinnerEl, count) {
     emailContainerEl.innerHTML = "";
 
