@@ -7,9 +7,17 @@ fetch(endpoint)
     .then(data => {
         /* Store Data */
         console.log(data);
+
+        /* Retrive DOM nodes */
+        const ulEl = document.getElementById("emails-list");
+
+        /* Create li element */
+        const li = document.createElement("li");
+        li.innerText = data.response;
+
+        /* Append to ulEl */
+        ulEl.append(li);
     })
     .catch(error => {
         console.log(error);
     })
-
-/* Add each email to listEl */
