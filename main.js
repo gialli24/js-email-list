@@ -1,50 +1,100 @@
 /* Endpoint */
 const endpoint = "https://flynn.boolean.careers/exercises/api/random/mail";
+const isReachable = false;
 
-/* Retrive DOM nodes */
-const ulEl = document.getElementById("emails-list");
+/* DOM Nodes */
+const endpointStatusEl = document.getElementById("endpoint-status");
+const callingSpinnerEl = document.getElementById("calling-spinner");
+
+const emailContainerEl = document.getElementById("email-container");
+
 
 /**
  * 
- * @param {string} email 
+ * @param {HTMLElement} endpointStatusEl 
+ * @param {HTMLElement} callingSpinnerEl 
+ * @param {string} responseCode 
+ * @param {string} responseStatusText 
+ * @param {string} status 
  */
-function renderEmail(email) {
+function renderBadge(endpointStatusEl, callingSpinnerEl, responseCode, responseStatusText, status) {
 
-    /* Create li element */
-    const li = document.createElement("li");
-    li.innerText = email;
+    callingSpinnerEl.classList.add("d-none");
+    endpointStatusEl.innerHTML = `${responseCode} ${responseStatusText}`;
 
-    /* Append to ulEl */
-    ulEl.append(li);
+    let badgeColor = "text-bg-danger";
+
+    if (status === "success") {
+        badgeColor = "text-bg-success";
+    }
+
+    endpointStatusEl.className = `badge rounded-pill ${badgeColor}`;
 }
 
 
 /**
  * 
- * @param {URL} endpoint 
+ * @param {string} endpoint 
+ * @param {HTMLElement} endpointStatusEl 
+ * @param {HTMLElement} callingSpinnerEl 
  */
-function addEmailFetchAPI(endpoint) {
-    /* API Call using fetch API  */
-    fetch(endpoint)
-        .then(response => response.json())
-        .then(data => {
-            /* Store Data */
-            const email = data.response;
+function checkEndpoint(endpoint, endpointStatusEl, callingSpinnerEl) {
 
-            /* Render HTML */
-            renderEmail(email);
+    axios.get(endpoint)
+        .then(response => {
+            const responseCode = response.status;
+            const responseStatusText = response.statusText;
+
+            /* Render Badge Success */
+            renderBadge(endpointStatusEl, callingSpinnerEl, responseCode, responseStatusText, "success");
         })
         .catch(error => {
-            console.log(error);
+            const response = error.response;
+
+            const responseCode = response.status;
+            const responseStatusText = response.statusText;
+
+            /* Render Badge Success */
+            renderBadge(endpointStatusEl, callingSpinnerEl, responseCode, responseStatusText, "error");
         })
 }
 
+
+/* Checkendpoint Connectivity */
+callingSpinnerEl.classList.remove("d-none");
+checkEndpoint(endpoint, endpointStatusEl, callingSpinnerEl);
+
+setInterval(function () {
+    callingSpinnerEl.classList.remove("d-none");
+
+    setTimeout(function () {
+        checkEndpoint(endpoint, endpointStatusEl, callingSpinnerEl)
+    }, 2000);
+}, 5000)
+
+
+function renderEmail(email, emailContainerEl, callingSpinnerEl, index) {
+
+    /* Create li element */
+    const tr = `
+        <tr>
+            <th scope="row">${index}</th>
+            <td>${email}</td>
+        </tr>
+    `;
+    emailContainerEl.innerHTML += tr;
+
+    callingSpinnerEl.classList.add("d-none");
+}
 
 /**
  * 
  * @param {URL} endpoint 
  */
-function addEmailAxios(endpoint) {
+function addEmail(endpoint, emailContainerEl, callingSpinnerEl, index) {
+
+    callingSpinnerEl.classList.remove("d-none");
+
     /* API Call using Axios Library  */
     axios.get(endpoint)
         .then(response => {
@@ -53,7 +103,7 @@ function addEmailAxios(endpoint) {
             const email = data.response;
 
             /* Render HTML */
-            renderEmail(email);
+            renderEmail(email, emailContainerEl, callingSpinnerEl, index);
         })
         .catch(error => {
             console.log(error);
@@ -61,5 +111,5 @@ function addEmailAxios(endpoint) {
 }
 
 for (let i = 0; i < 10; i++) {
-    addEmailAxios(endpoint);
+    addEmail(endpoint, emailContainerEl, callingSpinnerEl, i + 1)
 }
