@@ -6,6 +6,8 @@ const isReachable = false;
 const endpointStatusEl = document.getElementById("endpoint-status");
 const callingSpinnerEl = document.getElementById("calling-spinner");
 
+const generateEmailsBtn = document.getElementById("generateEmailsBtn");
+
 const emailContainerEl = document.getElementById("email-container");
 
 
@@ -110,6 +112,19 @@ function addEmail(endpoint, emailContainerEl, callingSpinnerEl, index) {
         })
 }
 
-for (let i = 0; i < 10; i++) {
-    addEmail(endpoint, emailContainerEl, callingSpinnerEl, i + 1)
+
+function addMoreEmails(endpoint, emailContainerEl, callingSpinnerEl, count) {
+    emailContainerEl.innerHTML = "";
+
+    for (let i = 0; i < count; i++) {
+        addEmail(endpoint, emailContainerEl, callingSpinnerEl, i + 1)
+    }
 }
+
+addMoreEmails(endpoint, emailContainerEl, callingSpinnerEl, 10);
+
+
+/* BTN Listener */
+generateEmailsBtn.addEventListener("click", function () {
+    addMoreEmails(endpoint, emailContainerEl, callingSpinnerEl, 10);
+})
